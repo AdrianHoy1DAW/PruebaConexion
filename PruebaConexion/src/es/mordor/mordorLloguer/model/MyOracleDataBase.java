@@ -94,20 +94,20 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 
 	boolean actualizado = false;
 
-	DataSource ds = MyDataSource.getMySQLDataSource();
+	DataSource ds = MyDataSource.getOracleDataSource();
 
 	try (Connection con = ds.getConnection();
 
 	Statement stmt = con.createStatement();) {
 
-	String query = "UPDATE EMPLEADO SET nombre=\""+empleado.getNombre()+"\", "+ 
-					"apellidos=\""+empleado.getApellidos()+"\","+ 
-					((empleado.getDomicilio() == null)?"domicilio=\""+empleado.getDomicilio()+"\",":"")+ 
-					((empleado.getCP() == null)?"CP=\""+empleado.getCP()+"\",":"")+ 
-					"email=\""+empleado.getEmail()+"\","+ 
-					"fechaNac=\""+empleado.getFechaNac()+"\","+ 
-					"cargo=\""+empleado.getCargo()+"\" "+ 
-					"WHERE DNI=\"" + empleado.getDNI() +"\"";
+	String query = "UPDATE EMPLEADO SET nombre='"+empleado.getNombre()+"', "+ 
+					"apellidos='"+empleado.getApellidos()+"',"+ 
+					((empleado.getDomicilio() != null)?"domicilio='"+empleado.getDomicilio()+"',":"")+ 
+					((empleado.getCP() != null)?"CP='"+empleado.getCP()+"',":"")+ 
+					"email='"+empleado.getEmail()+"',"+ 
+					"fechaNac=TO_DATE('" +empleado.getFechaNac()+"','yyyy-mm-dd'),"+ 
+					"cargo='"+empleado.getCargo()+"' "+ 
+					"WHERE DNI='" + empleado.getDNI() +"'";
 
 	System.out.println(query);
 	stmt.executeUpdate(query);
@@ -122,6 +122,12 @@ public class MyOracleDataBase implements AlmacenDatosDB {
 
 	return actualizado;
 
+	}
+
+	@Override
+	public boolean deleteEmpleado(String DNI) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 }

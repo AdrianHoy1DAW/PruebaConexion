@@ -16,9 +16,9 @@ public class Test {
 		
 		
 		
-		Empleado e = modelo.getEmpleadoPorDNI("87654321Z");
-		e.setDomicilio("La vereda");
-		modelo.updateEmpleado(e);
+		
+		
+		System.out.println(modelo.deleteEmpleado("76543210Y"));
 
 	}
 

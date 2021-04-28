@@ -106,8 +106,10 @@ public class MySqlDataBase implements AlmacenDatosDB {
 					"WHERE DNI=\"" + empleado.getDNI() +"\"";
 
 	stmt.executeUpdate(query);
-	System.out.println(query);
+	
 	actualizado = (stmt.executeUpdate(query)==1)?true:false;
+	
+	
 
 	} catch (SQLException e) {
 
@@ -117,6 +119,31 @@ public class MySqlDataBase implements AlmacenDatosDB {
 
 	return actualizado;
 
+	}
+
+	@Override
+	public boolean deleteEmpleado(String DNI) {
+		
+		boolean actualizado = false;
+		DataSource ds = MyDataSource.getMySQLDataSource();
+		
+		try (Connection con = ds.getConnection();
+				Statement stmt = con.createStatement();) {
+			String query = "DELETE FROM EMPLEADO WHERE DNI = '" + DNI + "'";
+			
+			System.out.println(query);
+			
+			
+			actualizado = (stmt.executeUpdate(query)==1)?true:false;
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		
+		return actualizado;
 	}
 
 }
