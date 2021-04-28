@@ -8,19 +8,19 @@ import java.util.ArrayList;
 
 import javax.sql.DataSource;
 
-public class MySqlDataBase implements AlmacenDatosDB {
+public class MyOracleDataBase implements AlmacenDatosDB {
 
 	private ArrayList<Empleado> getCustomEmpleados(String where) {
 		
 		ArrayList<Empleado> empleados = new ArrayList<Empleado>();
 		
-		DataSource ds = MyDataSource.getMySQLDataSource();
+		DataSource ds = MyDataSource.getOracleDataSource();
 		
 		String query = "SELECT * FROM EMPLEADO ";
 		if(where != null) 
 			query += "WHERE " + where;
 		
-
+		
 		
 		
 		try(Connection con = ds.getConnection();
@@ -76,12 +76,16 @@ public class MySqlDataBase implements AlmacenDatosDB {
 		
 		return getCustomEmpleados("cargo='" +cargo + "'");
 	}
-
+	
 	@Override
 	public Empleado getEmpleadoPorDNI(String DNI) {
 		
-		Empleado e = getCustomEmpleados("dni='"+DNI+"'").get(0);
-		return e;
+		ArrayList<Empleado> empleado = getCustomEmpleados("dni='"+DNI+"'");
+		if(empleado.size() != 0)
+			return empleado.get(0);
+		else
+			return null;
+		
 	}
 	
 	@Override
@@ -98,15 +102,16 @@ public class MySqlDataBase implements AlmacenDatosDB {
 
 	String query = "UPDATE EMPLEADO SET nombre=\""+empleado.getNombre()+"\", "+ 
 					"apellidos=\""+empleado.getApellidos()+"\","+ 
-					((empleado.getDomicilio() != null)?"domicilio=\""+empleado.getDomicilio()+"\",":"")+ 
-					((empleado.getCP() != null)?"CP=\""+empleado.getCP()+"\",":"")+ 
+					((empleado.getDomicilio() == null)?"domicilio=\""+empleado.getDomicilio()+"\",":"")+ 
+					((empleado.getCP() == null)?"CP=\""+empleado.getCP()+"\",":"")+ 
 					"email=\""+empleado.getEmail()+"\","+ 
 					"fechaNac=\""+empleado.getFechaNac()+"\","+ 
 					"cargo=\""+empleado.getCargo()+"\" "+ 
 					"WHERE DNI=\"" + empleado.getDNI() +"\"";
 
-	stmt.executeUpdate(query);
 	System.out.println(query);
+	stmt.executeUpdate(query);
+
 	actualizado = (stmt.executeUpdate(query)==1)?true:false;
 
 	} catch (SQLException e) {
@@ -118,5 +123,5 @@ public class MySqlDataBase implements AlmacenDatosDB {
 	return actualizado;
 
 	}
-
+	
 }

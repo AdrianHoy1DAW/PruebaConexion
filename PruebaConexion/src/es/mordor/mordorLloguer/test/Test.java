@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import es.mordor.mordorLloguer.model.AlmacenDatosDB;
 import es.mordor.mordorLloguer.model.Empleado;
+import es.mordor.mordorLloguer.model.MyOracleDataBase;
 import es.mordor.mordorLloguer.model.MySqlDataBase;
 
 public class Test {
@@ -13,9 +14,11 @@ public class Test {
 		AlmacenDatosDB modelo = new MySqlDataBase();
 		ArrayList<Empleado> empleados = new ArrayList<>();
 		
-		empleados = modelo.getEmpleados();
 		
-		System.out.println(empleados);
+		
+		Empleado e = modelo.getEmpleadoPorDNI("87654321Z");
+		e.setDomicilio("La vereda");
+		modelo.updateEmpleado(e);
 
 	}
 
